@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prepaid.SharedKernel", "Pre
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prepaid.Infrastructure", "Prepaid.Infrastructure\Prepaid.Infrastructure.csproj", "{267221EB-1BB0-4BA3-A022-98436E604C7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prepaid.Domain.Tests", "Prepaid.Domain.Tests\Prepaid.Domain.Tests.csproj", "{04DCB3A2-83E6-47CF-9EDF-5421D1C463FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{267221EB-1BB0-4BA3-A022-98436E604C7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{267221EB-1BB0-4BA3-A022-98436E604C7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{267221EB-1BB0-4BA3-A022-98436E604C7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04DCB3A2-83E6-47CF-9EDF-5421D1C463FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04DCB3A2-83E6-47CF-9EDF-5421D1C463FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04DCB3A2-83E6-47CF-9EDF-5421D1C463FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04DCB3A2-83E6-47CF-9EDF-5421D1C463FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
