@@ -1,4 +1,5 @@
-﻿using Prepaid.Domain.Models;
+﻿using Prepaid.Domain.Exceptions;
+using Prepaid.Domain.Models;
 using Prepaid.Domain.Models.States;
 
 namespace Prepaid.Domain.Tests;

@@ -1,6 +1,6 @@
 using Prepaid.SharedKernel.Exceptions;
 
-namespace Prepaid.Domain.Models;
+namespace Prepaid.Domain.Exceptions;
 
 public class StateTransitionNotAllowedDomainException : DomainException
 {

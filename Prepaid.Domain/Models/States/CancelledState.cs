@@ -1,3 +1,5 @@
+using Prepaid.Domain.Exceptions;
+
 namespace Prepaid.Domain.Models.States;
 
 public class CancelledState : IBookingState
