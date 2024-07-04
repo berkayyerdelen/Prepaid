@@ -19,7 +19,13 @@ public class Booking
     public Guid UniqueId { get; private set; }
     public AccessSlot AccessSlot { get; private set; }
     public Guid UserId { get;private set; }
-   
+
+    public PaymentInformation PaymentInformation { get; private set; }
+
+    public void SetPaymentInformation(PaymentInformation paymentInformation)
+    {
+        PaymentInformation = paymentInformation;
+    }
 
     public void SetUserId(Guid userId)
     {
