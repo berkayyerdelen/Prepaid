@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prepaid.Domain", "Prepaid.Domain\Prepaid.Domain.csproj", "{5EFB5996-7D37-4959-A547-0913982422FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prepaid.SharedKernel", "Prepaid.SharedKernel\Prepaid.SharedKernel.csproj", "{9E82D987-FA79-4071-BE60-8D2C6376D23F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5EFB5996-7D37-4959-A547-0913982422FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EFB5996-7D37-4959-A547-0913982422FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EFB5996-7D37-4959-A547-0913982422FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EFB5996-7D37-4959-A547-0913982422FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E82D987-FA79-4071-BE60-8D2C6376D23F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E82D987-FA79-4071-BE60-8D2C6376D23F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E82D987-FA79-4071-BE60-8D2C6376D23F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E82D987-FA79-4071-BE60-8D2C6376D23F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
