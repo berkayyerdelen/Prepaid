@@ -6,6 +6,7 @@ using Prepaid.Domain.Repositories;
 using Prepaid.Infrastructure.Configurations;
 using Prepaid.Infrastructure.Persistence;
 using Prepaid.Infrastructure.Repositories;
+using Prepaid.SharedKernel.Configurations;
 
 namespace Prepaid.Api.Extensions;
 
@@ -18,8 +19,11 @@ public static class ServiceCollectionExtensions
         return serviceCollection;
     }
 
-    private static IServiceCollection AddDomainPolicies(this IServiceCollection serviceCollection)
+    private static IServiceCollection AddDomainPolicies(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
+        var bookingRefundPolicyConfiguration = configuration.GetSection(nameof(BookingRefundPolicyConfiguration)).Get<BookingRefundPolicyConfiguration>();
+        serviceCollection.AddSingleton(bookingRefundPolicyConfiguration);
+        
         serviceCollection.AddScoped<IBookingRefundPolicy, BookingRefundPolicy>();
 
         return serviceCollection;
@@ -45,11 +49,12 @@ public static class ServiceCollectionExtensions
     }
 
 
-    public static void AddDependencies(this IServiceCollection serviceCollection, IConfiguration configuration)
+    public static IServiceCollection AddDependencies(this IServiceCollection serviceCollection,
+        IConfiguration configuration)
     {
-        AddRepositories(serviceCollection);
-        AddDomainPolicies(serviceCollection);
-        AddPersistence(serviceCollection, configuration);
-        AddInternalServices(serviceCollection);
+        return AddRepositories(serviceCollection)
+            .AddDomainPolicies(configuration)
+            .AddPersistence(configuration)
+            .AddInternalServices();
     }
 }

@@ -6,7 +6,7 @@ namespace Prepaid.Application.Contracts;
 public interface IBookingService
 {
     Task<BookingApplicationResponse> Get(Guid uniqueId, CancellationToken cancellationToken = default);
-    Task Create(CreateBookingApplicationRequest request, CancellationToken cancellationToken = default);
+    Task<CreateBookingApplicationResponse> Create(CreateBookingApplicationRequest request, CancellationToken cancellationToken = default);
 
     Task Refund(Guid uniqueId, CancellationToken cancellationToken = default);
 

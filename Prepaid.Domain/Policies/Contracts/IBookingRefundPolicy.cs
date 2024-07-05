@@ -4,5 +4,6 @@ namespace Prepaid.Domain.Policies.Contracts;
 
 public interface IBookingRefundPolicy
 {
-    Task<bool> ApplyRefund(Booking booking, CancellationToken cancellationToken = default);
+    Task<bool> CheckRefundable(Booking booking, CancellationToken cancellationToken = default);
+    Task<decimal> CalculateRefundableAmount(Booking booking, decimal newAmount, CancellationToken cancellationToken);
 }

@@ -74,15 +74,25 @@ public class Booking
     public void SetExpiredState() => _bookingState.SetExpired();
     public void SetCancelled() => _bookingState.SetCancelled();
 
-    public async Task ApplyRefund(IBookingRefundPolicy bookingRefundPolicy,
+    public async Task<bool> CheckRefundable(IBookingRefundPolicy bookingRefundPolicy,
         CancellationToken cancellationToken = default)
     {
-        var isRefundable = await bookingRefundPolicy.ApplyRefund(this, cancellationToken);
+       return await bookingRefundPolicy.CheckRefundable(this, cancellationToken);
+    }
 
-        if (!isRefundable)
-        {
-            throw new InApplicableRefundDomainException($"Ineligible booking: {UniqueId} for applying refund");
-        }
+    public async Task<decimal> CalculateRefundableAmount(IBookingRefundPolicy bookingRefundPolicy, decimal newAmount, CancellationToken cancellationToken)
+    {
+        return await bookingRefundPolicy.CalculateRefundableAmount(this, newAmount, cancellationToken);
+    }
+
+    public decimal CalculateActualAmountAfterRefund(decimal refundableAmount)
+    {
+        return PaymentInformation.Amount - refundableAmount;
+    }
+
+    public decimal CalculateAdditionalCostForBookingUpdate(decimal newAmount)
+    {
+        return newAmount - PaymentInformation.Amount;
     }
 }
 

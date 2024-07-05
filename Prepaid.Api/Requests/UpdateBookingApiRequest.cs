@@ -1,6 +1,6 @@
-﻿namespace Prepaid.Application.Requests;
+﻿namespace Prepaid.Api.Requests;
 
-public class UpdateBookingApplicationRequest
+public class UpdateBookingApiRequest
 {
     public DateTime? StartTime { get; set; }
     public DateTime EndTime { get; set; }

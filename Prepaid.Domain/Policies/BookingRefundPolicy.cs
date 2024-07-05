@@ -13,7 +13,7 @@ public class BookingRefundPolicy : IBookingRefundPolicy
         _bookingRefundPolicyConfiguration = bookingRefundPolicyConfiguration;
     }
 
-    public Task<bool> ApplyRefund(Booking booking, CancellationToken cancellationToken = default)
+    public Task<bool> CheckRefundable(Booking booking, CancellationToken cancellationToken = default)
     {
         if (booking.BookingSate == BookingState.Paid)
         {
@@ -22,5 +22,17 @@ public class BookingRefundPolicy : IBookingRefundPolicy
         }
 
         return Task.FromResult(false);
+    }
+
+    public Task<decimal> CalculateRefundableAmount(Booking booking, decimal newAmount, CancellationToken cancellationToken)
+    {
+        if (booking.PaymentInformation.Amount > newAmount)
+        {
+            var refundableAmount = booking.PaymentInformation.Amount - newAmount;
+
+            return Task.FromResult(refundableAmount);
+        }
+
+        return Task.FromResult(0.0m);
     }
 }

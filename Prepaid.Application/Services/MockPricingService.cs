@@ -23,6 +23,11 @@ public class MockPaymentService : IMockPaymentService
     {
        return Task.CompletedTask;
     }
+
+    public Task MakeRefund(Guid uniqueId, string paymentId, decimal amount, CancellationToken cancellationToken = default)
+    {
+        return Task.CompletedTask;
+    }
 }
 
 public interface IMockPricingService
@@ -34,4 +39,5 @@ public interface IMockPaymentService
 {
     Task<string> Create(Guid uniqueId, decimal amount, CancellationToken cancellationToken = default);
     Task MakePartialRefund(Guid uniqueId, string paymentId, decimal amount, CancellationToken cancellationToken = default);
+    Task MakeRefund(Guid uniqueId, string paymentId, decimal amount, CancellationToken cancellationToken = default);
 }
