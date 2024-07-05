@@ -1,0 +1,6 @@
+﻿services:
+  prepaid.api:
+    image: prepaid.api
+    build:
+      context: .
+      dockerfile: Prepaid.Api/Dockerfile

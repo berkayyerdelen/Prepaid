@@ -1,5 +1,6 @@
 ﻿using Prepaid.Domain.Exceptions;
 using Prepaid.Domain.Models.States;
+using Prepaid.Domain.Policies.Contracts;
 
 namespace Prepaid.Domain.Models;
 
@@ -21,11 +22,27 @@ public class Booking
     public AccessSlot AccessSlot { get; private set; }
     public Guid UserId { get; private set; }
 
+    public string? PartnerId { get; private set; }
+
     public PaymentInformation PaymentInformation { get; private set; }
 
+    public IReadOnlyCollection<PriorPaymentInformation> PriorPaymentInformation =>
+        _priorPaymentInformation.AsReadOnly();
+
+    public IList<PriorPaymentInformation> _priorPaymentInformation;
+    public void AddPriorPaymentInformation(PriorPaymentInformation priorPaymentInformation)
+    {
+        _priorPaymentInformation.Add(priorPaymentInformation);
+    }
+    
     public void SetPaymentInformation(PaymentInformation paymentInformation)
     {
         PaymentInformation = paymentInformation;
+    }
+
+    public void SetPartnerId(string partnerId)
+    {
+        PartnerId = partnerId;
     }
 
     public void SetUserId(Guid userId)
@@ -51,12 +68,26 @@ public class Booking
         private set => _bookingState = StateResolver.Resolve(value, this);
     }
 
-    internal void ChangeState(IBookingState bookingState)
-    {
-        _bookingState = bookingState;
-    }
-
     public void SetPaidState() => _bookingState.SetPaid();
-    public void SetCancelledState() => _bookingState.SetCancelled();
+    public void SetRefundedState() => _bookingState.SetRefunded();
     public void SetPendingState() => _bookingState.SetPending();
+    public void SetExpiredState() => _bookingState.SetExpired();
+    public void SetCancelled() => _bookingState.SetCancelled();
+
+    public async Task ApplyRefund(IBookingRefundPolicy bookingRefundPolicy,
+        CancellationToken cancellationToken = default)
+    {
+        var isRefundable = await bookingRefundPolicy.ApplyRefund(this, cancellationToken);
+
+        if (!isRefundable)
+        {
+            throw new InApplicableRefundDomainException($"Ineligible booking: {UniqueId} for applying refund");
+        }
+    }
+}
+
+public class PriorPaymentInformation
+{
+    public Guid BookingId { get; set; }
+    public decimal Amount { get; set; }
 }

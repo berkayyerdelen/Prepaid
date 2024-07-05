@@ -13,7 +13,7 @@ public class PendingState: IBookingState
 
     public void SetPaid()
     {
-        _booking.ChangeState(new PaidState(_booking));
+        _booking.SetPaidState();
     }
 
     public void SetPending()
@@ -21,9 +21,19 @@ public class PendingState: IBookingState
         throw new StateTransitionNotAllowedDomainException($"Already in same state {_booking.BookingSate}");
     }
 
+    public void SetRefunded()
+    {
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Refunded}");
+    }
+
+    public void SetExpired()
+    {
+        _booking.SetExpiredState();
+    }
+
     public void SetCancelled()
     {
-        _booking.ChangeState(new CancelledState(_booking));
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Cancelled}");
     }
 
     public BookingState BookingState => BookingState.Pending;

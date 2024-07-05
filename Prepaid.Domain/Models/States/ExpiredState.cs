@@ -2,11 +2,11 @@
 
 namespace Prepaid.Domain.Models.States;
 
-public class CancelledState: IBookingState
+public class ExpiredState : IBookingState
 {
     private readonly Booking _booking;
 
-    public CancelledState(Booking booking)
+    public ExpiredState(Booking booking)
     {
         _booking = booking;
     }
@@ -36,5 +36,5 @@ public class CancelledState: IBookingState
         throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Cancelled}");
     }
 
-    public BookingState BookingState => BookingState.Cancelled;
+    public BookingState BookingState => BookingState.Expired;
 }

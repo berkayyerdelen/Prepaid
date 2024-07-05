@@ -22,6 +22,19 @@ public class BookingRepository : IBookingRepository
 
     public Task Add(Booking booking, CancellationToken cancellationToken = default)
     {
-        return _applicationContext.Bookings.InsertOneAsync(booking,new InsertOneOptions(), cancellationToken);
+        return _applicationContext.Bookings.InsertOneAsync(booking, new InsertOneOptions(), cancellationToken);
+    }
+
+    public async Task Update(Guid uniqueId, Action<Booking> act, CancellationToken cancellationToken)
+    {
+        var booking = await Get(uniqueId, cancellationToken);
+
+        act(booking);
+
+        await _applicationContext.Bookings.ReplaceOneAsync(x => x.UniqueId == booking.UniqueId,
+            booking, new ReplaceOptions()
+            {
+                IsUpsert = false
+            }, cancellationToken);
     }
 }

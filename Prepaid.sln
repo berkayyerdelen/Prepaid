@@ -8,6 +8,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prepaid.Infrastructure", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prepaid.Domain.Tests", "Prepaid.Domain.Tests\Prepaid.Domain.Tests.csproj", "{04DCB3A2-83E6-47CF-9EDF-5421D1C463FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prepaid.Application", "Prepaid.Application\Prepaid.Application.csproj", "{778D5928-BB5E-4EFE-AD74-944CF3E645E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prepaid.Api", "Prepaid.Api\Prepaid.Api.csproj", "{27A24E35-6C82-455D-93E3-E79DFB5D44B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C9463657-01AF-47AB-8A98-5B3E1398C83F}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +39,13 @@ Global
 		{04DCB3A2-83E6-47CF-9EDF-5421D1C463FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04DCB3A2-83E6-47CF-9EDF-5421D1C463FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04DCB3A2-83E6-47CF-9EDF-5421D1C463FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{778D5928-BB5E-4EFE-AD74-944CF3E645E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{778D5928-BB5E-4EFE-AD74-944CF3E645E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{778D5928-BB5E-4EFE-AD74-944CF3E645E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{778D5928-BB5E-4EFE-AD74-944CF3E645E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27A24E35-6C82-455D-93E3-E79DFB5D44B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27A24E35-6C82-455D-93E3-E79DFB5D44B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27A24E35-6C82-455D-93E3-E79DFB5D44B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27A24E35-6C82-455D-93E3-E79DFB5D44B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
