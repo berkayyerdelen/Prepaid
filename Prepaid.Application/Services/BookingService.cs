@@ -38,9 +38,6 @@ public class BookingService : IBookingService
         booking.SetAccessSlot(new AccessSlot().SetAccessSlot(request.StartTime, request.EndTime));
         booking.SetUserId(request.UserId);
 
-        // call pricing service
-        // call payment service to fill payment information in booking entity
-
         await _bookingRepository.Add(booking, cancellationToken);
     }
 
@@ -79,6 +76,7 @@ public class BookingService : IBookingService
 
 
             await _bookingRepository.Update(initialBooking.UniqueId, x => { x.SetCancelled(); }, cancellationToken);
+            
             booking.SetPaymentInformation(new PaymentInformation(initialBooking.PaymentInformation.PaymentId, initialBooking.PaymentInformation.PaymentToken, newPrice, booking.PaymentInformation.ServiceFee,DateTime.UtcNow));
             booking.SetPaidState();
             booking.AddPriorPaymentInformation(new PriorPaymentInformation()
