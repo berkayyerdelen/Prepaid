@@ -1,6 +1,7 @@
 ﻿using Prepaid.Domain.Exceptions;
 using Prepaid.Domain.Models.States;
 using Prepaid.Domain.Policies.Contracts;
+
 namespace Prepaid.Domain.Models;
 
 public class Booking
@@ -21,11 +22,18 @@ public class Booking
     public AccessSlot AccessSlot { get; private set; }
     public Guid UserId { get; private set; }
 
+    public string? PartnerId { get; private set; }
+
     public PaymentInformation PaymentInformation { get; private set; }
 
     public void SetPaymentInformation(PaymentInformation paymentInformation)
     {
         PaymentInformation = paymentInformation;
+    }
+
+    public void SetPartnerId(string partnerId)
+    {
+        PartnerId = partnerId;
     }
 
     public void SetUserId(Guid userId)

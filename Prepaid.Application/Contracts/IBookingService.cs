@@ -9,4 +9,6 @@ public interface IBookingService
     Task Create(BookingApplicationRequest request, CancellationToken cancellationToken = default);
 
     Task Refund(Guid uniqueId, CancellationToken cancellationToken = default);
+
+    Task Confirm(Guid uniqueId, PaymentInformationApplicationRequest request, string? partnerId = default, CancellationToken cancellationToken = default);
 }

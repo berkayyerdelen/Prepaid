@@ -39,6 +39,16 @@ public class BookingService : IBookingService
         await _bookingRepository.Add(booking, cancellationToken);
     }
 
+    public async Task Confirm(Guid uniqueId, PaymentInformationApplicationRequest request, string? partnerId = default, CancellationToken cancellationToken = default)
+    {
+        await _bookingRepository.Update(uniqueId, booking =>
+        {
+            booking.SetPaymentInformation(new PaymentInformation(request.PaymentId, request.PaymentToken,
+                request.Amount, request.ServiceFee, request.PaymentDate));
+            booking.SetPartnerId(partnerId!);
+        }, cancellationToken);
+    }
+
     public async Task Refund(Guid uniqueId, CancellationToken cancellationToken = default)
     {
         var booking = await _bookingRepository.Get(uniqueId, cancellationToken);
