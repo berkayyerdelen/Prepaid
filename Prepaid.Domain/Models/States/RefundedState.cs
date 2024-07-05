@@ -13,12 +13,12 @@ public class RefundedState : IBookingState
 
     public void SetPaid()
     {
-        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {nameof(BookingState.Paid)}");
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Paid}");
     }
 
     public void SetPending()
     {
-        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {nameof(BookingState.Pending)}");
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Pending}");
     }
 
     public void SetRefunded()
@@ -31,5 +31,10 @@ public class RefundedState : IBookingState
         _booking.SetExpiredState();
     }
 
-    public BookingState BookingState => BookingState.RefundedState;
+    public void SetCancelled()
+    {
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Cancelled}");
+    }
+
+    public BookingState BookingState => BookingState.Refunded;
 }

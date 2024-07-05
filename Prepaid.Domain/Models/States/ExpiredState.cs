@@ -1,4 +1,6 @@
-﻿namespace Prepaid.Domain.Models.States;
+﻿using Prepaid.Domain.Exceptions;
+
+namespace Prepaid.Domain.Models.States;
 
 public class ExpiredState : IBookingState
 {
@@ -11,22 +13,27 @@ public class ExpiredState : IBookingState
 
     public void SetPaid()
     {
-        throw new NotImplementedException();
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Paid}");
     }
 
     public void SetPending()
     {
-        throw new NotImplementedException();
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Pending}");
     }
 
     public void SetRefunded()
     {
-        throw new NotImplementedException();
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Refunded}");
     }
 
     public void SetExpired()
     {
-        throw new NotImplementedException();
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Expired}");
+    }
+
+    public void SetCancelled()
+    {
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Cancelled}");
     }
 
     public BookingState BookingState => BookingState.Expired;

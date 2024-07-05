@@ -26,6 +26,15 @@ public class Booking
 
     public PaymentInformation PaymentInformation { get; private set; }
 
+    public IReadOnlyCollection<PriorPaymentInformation> PriorPaymentInformation =>
+        _priorPaymentInformation.AsReadOnly();
+
+    public IList<PriorPaymentInformation> _priorPaymentInformation;
+    public void AddPriorPaymentInformation(PriorPaymentInformation priorPaymentInformation)
+    {
+        _priorPaymentInformation.Add(priorPaymentInformation);
+    }
+    
     public void SetPaymentInformation(PaymentInformation paymentInformation)
     {
         PaymentInformation = paymentInformation;
@@ -63,6 +72,7 @@ public class Booking
     public void SetRefundedState() => _bookingState.SetRefunded();
     public void SetPendingState() => _bookingState.SetPending();
     public void SetExpiredState() => _bookingState.SetExpired();
+    public void SetCancelled() => _bookingState.SetCancelled();
 
     public async Task ApplyRefund(IBookingRefundPolicy bookingRefundPolicy,
         CancellationToken cancellationToken = default)
@@ -74,4 +84,10 @@ public class Booking
             throw new InApplicableRefundDomainException($"Ineligible booking: {UniqueId} for applying refund");
         }
     }
+}
+
+public class PriorPaymentInformation
+{
+    public Guid BookingId { get; set; }
+    public decimal Amount { get; set; }
 }

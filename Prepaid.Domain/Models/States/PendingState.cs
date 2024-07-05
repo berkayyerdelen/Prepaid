@@ -23,12 +23,17 @@ public class PendingState: IBookingState
 
     public void SetRefunded()
     {
-        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.RefundedState}");
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Refunded}");
     }
 
     public void SetExpired()
     {
         _booking.SetExpiredState();
+    }
+
+    public void SetCancelled()
+    {
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Cancelled}");
     }
 
     public BookingState BookingState => BookingState.Pending;

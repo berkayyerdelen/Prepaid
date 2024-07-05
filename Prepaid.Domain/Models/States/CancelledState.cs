@@ -2,18 +2,18 @@
 
 namespace Prepaid.Domain.Models.States;
 
-public class PaidState : IBookingState
+public class CancelledState: IBookingState
 {
     private readonly Booking _booking;
 
-    public PaidState(Booking booking)
+    public CancelledState(Booking booking)
     {
         _booking = booking;
     }
 
     public void SetPaid()
     {
-        throw new StateTransitionNotAllowedDomainException($"Already in same state {_booking.BookingSate}");
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Paid}");
     }
 
     public void SetPending()
@@ -21,10 +21,9 @@ public class PaidState : IBookingState
         throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Pending}");
     }
 
-
     public void SetRefunded()
     {
-        _booking.SetRefundedState();
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Refunded}");
     }
 
     public void SetExpired()
@@ -34,8 +33,8 @@ public class PaidState : IBookingState
 
     public void SetCancelled()
     {
-        _booking.SetCancelled();
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Cancelled}");
     }
 
-    public BookingState BookingState => BookingState.Paid;
+    public BookingState BookingState => BookingState.Cancelled;
 }

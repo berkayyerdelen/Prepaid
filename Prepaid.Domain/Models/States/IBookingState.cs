@@ -6,5 +6,6 @@ public interface IBookingState
     void SetPending();
     void SetRefunded();
     void SetExpired();
+    void SetCancelled();
     BookingState BookingState { get; }
 }

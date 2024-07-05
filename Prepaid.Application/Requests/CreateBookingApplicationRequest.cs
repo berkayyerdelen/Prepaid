@@ -1,6 +1,6 @@
 ﻿namespace Prepaid.Application.Requests;
 
-public class BookingApplicationRequest
+public class CreateBookingApplicationRequest
 {
     public Guid UserId { get; set; }
     public DateTime? StartTime { get; set; }

@@ -12,8 +12,10 @@ public class StateResolver
                 return new PaidState(booking);
             case BookingState.Pending:
                 return new PendingState(booking);
-            case BookingState.RefundedState:
+            case BookingState.Refunded:
                 return new RefundedState(booking);
+            case BookingState.Cancelled:
+                return new CancelledState(booking);
             default:
                 throw new ArgumentNullException(nameof(bookingState));
         }
