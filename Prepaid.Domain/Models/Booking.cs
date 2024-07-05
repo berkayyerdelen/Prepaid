@@ -1,6 +1,6 @@
 ﻿using Prepaid.Domain.Exceptions;
 using Prepaid.Domain.Models.States;
-
+using Prepaid.Domain.Policies.Contracts;
 namespace Prepaid.Domain.Models;
 
 public class Booking
@@ -51,12 +51,19 @@ public class Booking
         private set => _bookingState = StateResolver.Resolve(value, this);
     }
 
-    internal void ChangeState(IBookingState bookingState)
-    {
-        _bookingState = bookingState;
-    }
-
     public void SetPaidState() => _bookingState.SetPaid();
-    public void SetCancelledState() => _bookingState.SetCancelled();
+    public void SetRefundedState() => _bookingState.SetRefunded();
     public void SetPendingState() => _bookingState.SetPending();
+    public void SetExpiredState() => _bookingState.SetExpired();
+
+    public async Task ApplyRefund(IBookingRefundPolicy bookingRefundPolicy,
+        CancellationToken cancellationToken = default)
+    {
+        var isRefundable = await bookingRefundPolicy.ApplyRefund(this, cancellationToken);
+
+        if (!isRefundable)
+        {
+            throw new InApplicableRefundDomainException($"Ineligible booking: {UniqueId} for applying refund");
+        }
+    }
 }

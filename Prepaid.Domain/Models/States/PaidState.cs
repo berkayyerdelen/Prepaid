@@ -18,13 +18,18 @@ public class PaidState : IBookingState
 
     public void SetPending()
     {
-        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {nameof(BookingState.Pending)}");
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Pending}");
     }
 
 
-    public void SetCancelled()
+    public void SetRefunded()
     {
-        _booking.ChangeState(new CancelledState(_booking));
+        _booking.SetRefundedState();
+    }
+
+    public void SetExpired()
+    {
+        throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {BookingState.Expired}");
     }
 
     public BookingState BookingState => BookingState.Paid;

@@ -2,11 +2,11 @@ using Prepaid.Domain.Exceptions;
 
 namespace Prepaid.Domain.Models.States;
 
-public class CancelledState : IBookingState
+public class RefundedState : IBookingState
 {
     private readonly Booking _booking;
 
-    public CancelledState(Booking booking)
+    public RefundedState(Booking booking)
     {
         _booking = booking;
     }
@@ -21,10 +21,15 @@ public class CancelledState : IBookingState
         throw new StateTransitionNotAllowedDomainException($"Booking state transition not allowed from {_booking.BookingSate} to {nameof(BookingState.Pending)}");
     }
 
-    public void SetCancelled()
+    public void SetRefunded()
     {
         throw new StateTransitionNotAllowedDomainException($"Already in same state {_booking.BookingSate}");
     }
 
-    public BookingState BookingState => BookingState.Cancelled;
+    public void SetExpired()
+    {
+        _booking.SetExpiredState();
+    }
+
+    public BookingState BookingState => BookingState.RefundedState;
 }
