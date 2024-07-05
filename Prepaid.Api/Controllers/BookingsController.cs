@@ -34,6 +34,21 @@ public class BookingsController : ControllerBase
         });
     }
 
+    [HttpPost("{uniqueId}/confirm")]
+    public async Task<ActionResult> Confirm(Guid uniqueId, PaymentInformationApiRequest request, CancellationToken cancellationToken =default)
+    {
+       await _bookingService.Confirm(uniqueId, new PaymentInformationApplicationRequest()
+        {
+            PaymentDate = request.PaymentDate,
+            PaymentId = request.PaymentId,
+            Amount = request.Amount,
+            PaymentToken = request.PaymentToken,
+            ServiceFee = request.ServiceFee
+        }, string.Empty,cancellationToken);
+
+        return Ok();
+    }
+
     [HttpPut("{bookingId}")]
     public async Task<ActionResult> Update(Guid bookingId, UpdateBookingApiRequest request,
         CancellationToken cancellationToken = default)
