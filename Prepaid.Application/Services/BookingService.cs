@@ -66,47 +66,50 @@ public class BookingService : IBookingService
     public async Task<UpdateBookingApplicationResponse> Update(Guid uniqueId, UpdateBookingApplicationRequest request,
         CancellationToken cancellationToken = default)
     {
-        //todo encapsulate login within domain layer gl!
         var initialBooking = await _bookingRepository.Get(uniqueId, cancellationToken);
         string paymentUrl = string.Empty;
-
         var booking = new Booking();
-        booking.SetAccessSlot(new AccessSlot().SetAccessSlot(request.StartTime, request.EndTime));
-        booking.SetUserId(request.UserId);
+        var isRefundable = await initialBooking.CheckRefundable(_bookingRefundPolicy, cancellationToken);
 
-        var newPrice =
-            await _mockPricingService.CalculatePrice(request.StartTime.Value, request.EndTime, cancellationToken);
-
-        if (booking.PaymentInformation.Amount > newPrice)
+        if (isRefundable)
         {
-            var refundableAmount = initialBooking.PaymentInformation.Amount - newPrice;
+            booking.SetAccessSlot(new AccessSlot().SetAccessSlot(request.StartTime, request.EndTime));
+            booking.SetUserId(request.UserId);
 
-            await _mockPaymentService.MakePartialRefund(initialBooking.UniqueId,
-                initialBooking.PaymentInformation.PaymentId!,
-                refundableAmount, cancellationToken);
+            var newAmount =
+                await _mockPricingService.CalculatePrice(request.StartTime.Value, request.EndTime, cancellationToken);
 
+            var refundableAmount =
+                await initialBooking.CalculateRefundableAmount(_bookingRefundPolicy, newAmount, cancellationToken);
 
-            await _bookingRepository.Update(initialBooking.UniqueId, x => { x.SetCancelled(); }, cancellationToken);
-
-            booking.SetPaymentInformation(new PaymentInformation(initialBooking.PaymentInformation.PaymentId,
-                initialBooking.PaymentInformation.PaymentToken, newPrice, booking.PaymentInformation.ServiceFee,
-                DateTime.UtcNow));
-            booking.SetPaidState();
-            booking.AddPriorPaymentInformation(new PriorPaymentInformation()
+            if (refundableAmount >= 0.0m)
             {
-                Amount = initialBooking.PaymentInformation.Amount,
-                BookingId = initialBooking.UniqueId
-            });
-        }
-        else if (booking.PaymentInformation.Amount < newPrice)
-        {
-            var extraAmount = newPrice - initialBooking.PaymentInformation.Amount;
+                await _mockPaymentService.MakePartialRefund(initialBooking.UniqueId,
+                    initialBooking.PaymentInformation.PaymentId!, refundableAmount, cancellationToken);
 
-            paymentUrl = await _mockPaymentService.Create(booking.UniqueId, extraAmount, cancellationToken);
-            booking.SetPendingState();
-        }
+                await _bookingRepository.Update(initialBooking.UniqueId, x => { x.SetCancelled(); }, cancellationToken);
 
-        await _bookingRepository.Add(booking, cancellationToken);
+                var newBookingAmount = initialBooking.CalculateActualAmountAfterRefund(refundableAmount);
+                booking.SetPaymentInformation(new PaymentInformation(initialBooking.PaymentInformation.PaymentId,
+                    initialBooking.PaymentInformation.PaymentToken, newBookingAmount,
+                    initialBooking.PaymentInformation.ServiceFee, DateTime.UtcNow));
+                booking.AddPriorPaymentInformation(new PriorPaymentInformation()
+                {
+                    Amount = initialBooking.PaymentInformation.Amount,
+                    BookingId = initialBooking.UniqueId
+                });
+                booking.SetPaidState();
+            }
+            else
+            {
+                var extraAmount = initialBooking.CalculateAdditionalCostForBookingUpdate(newAmount);
+
+                paymentUrl = await _mockPaymentService.Create(booking.UniqueId, extraAmount, cancellationToken);
+                booking.SetPendingState();
+            }
+
+            await _bookingRepository.Add(booking, cancellationToken);
+        }
 
         return new UpdateBookingApplicationResponse()
         {
@@ -119,6 +122,13 @@ public class BookingService : IBookingService
     {
         var booking = await _bookingRepository.Get(uniqueId, cancellationToken);
 
-        await booking.ApplyRefund(_bookingRefundPolicy, cancellationToken);
+        var isRefundable = await booking.CheckRefundable(_bookingRefundPolicy, cancellationToken);
+
+        if (isRefundable)
+        {
+            await _mockPaymentService.MakePartialRefund(booking.UniqueId, booking.PaymentInformation.PaymentId,
+                booking.PaymentInformation.Amount,
+                cancellationToken);
+        }
     }
 }
