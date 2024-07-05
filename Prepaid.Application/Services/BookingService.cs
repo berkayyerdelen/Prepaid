@@ -32,13 +32,24 @@ public class BookingService : IBookingService
         return booking.ToApplicationResponse();
     }
 
-    public async Task Create(CreateBookingApplicationRequest request, CancellationToken cancellationToken = default)
+    public async Task<CreateBookingApplicationResponse> Create(CreateBookingApplicationRequest request,
+        CancellationToken cancellationToken = default)
     {
         var booking = new Booking();
         booking.SetAccessSlot(new AccessSlot().SetAccessSlot(request.StartTime, request.EndTime));
         booking.SetUserId(request.UserId);
 
+        var price = await _mockPricingService.CalculatePrice(request.StartTime.Value, request.EndTime,
+            cancellationToken);
+        var paymentUrl = await _mockPaymentService.Create(booking.UniqueId, price, cancellationToken);
+
         await _bookingRepository.Add(booking, cancellationToken);
+
+        return new CreateBookingApplicationResponse()
+        {
+            UniqueId = booking.UniqueId,
+            PaymentUrl = paymentUrl
+        };
     }
 
     public async Task Confirm(Guid uniqueId, PaymentInformationApplicationRequest request, string? partnerId = default,
@@ -58,7 +69,7 @@ public class BookingService : IBookingService
         //todo encapsulate login within domain layer gl!
         var initialBooking = await _bookingRepository.Get(uniqueId, cancellationToken);
         string paymentUrl = string.Empty;
-        
+
         var booking = new Booking();
         booking.SetAccessSlot(new AccessSlot().SetAccessSlot(request.StartTime, request.EndTime));
         booking.SetUserId(request.UserId);
@@ -76,8 +87,10 @@ public class BookingService : IBookingService
 
 
             await _bookingRepository.Update(initialBooking.UniqueId, x => { x.SetCancelled(); }, cancellationToken);
-            
-            booking.SetPaymentInformation(new PaymentInformation(initialBooking.PaymentInformation.PaymentId, initialBooking.PaymentInformation.PaymentToken, newPrice, booking.PaymentInformation.ServiceFee,DateTime.UtcNow));
+
+            booking.SetPaymentInformation(new PaymentInformation(initialBooking.PaymentInformation.PaymentId,
+                initialBooking.PaymentInformation.PaymentToken, newPrice, booking.PaymentInformation.ServiceFee,
+                DateTime.UtcNow));
             booking.SetPaidState();
             booking.AddPriorPaymentInformation(new PriorPaymentInformation()
             {
@@ -89,12 +102,12 @@ public class BookingService : IBookingService
         {
             var extraAmount = newPrice - initialBooking.PaymentInformation.Amount;
 
-             paymentUrl = await _mockPaymentService.Create(booking.UniqueId, extraAmount, cancellationToken);
-             booking.SetPendingState();
+            paymentUrl = await _mockPaymentService.Create(booking.UniqueId, extraAmount, cancellationToken);
+            booking.SetPendingState();
         }
-        
+
         await _bookingRepository.Add(booking, cancellationToken);
-        
+
         return new UpdateBookingApplicationResponse()
         {
             UniqueId = booking.UniqueId,
