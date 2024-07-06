@@ -60,6 +60,7 @@ public class BookingService : IBookingService
             booking.SetPaymentInformation(new PaymentInformation(request.PaymentId, request.PaymentToken,
                 request.Amount, request.ServiceFee, request.PaymentDate));
             booking.SetPartnerId(partnerId!);
+            booking.SetPaidState();
         }, cancellationToken);
     }
 
