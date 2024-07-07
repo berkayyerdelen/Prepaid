@@ -14,7 +14,7 @@ public class BookingRepository : IBookingRepository
         _applicationContext = applicationContext;
     }
 
-    public Task<Booking> Get(Guid uniqueId, CancellationToken cancellationToken = default)
+    public Task<Booking>? Get(Guid uniqueId, CancellationToken cancellationToken = default)
     {
         var filterDefinition = new FilterDefinitionBuilder<Booking>().Eq(x => x.UniqueId, uniqueId);
         return _applicationContext.Bookings.Find(filterDefinition).FirstOrDefaultAsync(cancellationToken);

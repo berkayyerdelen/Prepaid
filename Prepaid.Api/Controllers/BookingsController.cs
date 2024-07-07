@@ -3,6 +3,7 @@ using Prepaid.Api.Requests;
 using Prepaid.Api.Responses;
 using Prepaid.Application.Contracts;
 using Prepaid.Application.Requests;
+using Prepaid.Application.Responses;
 
 namespace Prepaid.Api.Controllers;
 

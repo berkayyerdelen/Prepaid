@@ -25,10 +25,14 @@ public class BookingService : IBookingService
         _mockPaymentService = mockPaymentService;
     }
 
-    public async Task<BookingApplicationResponse> Get(Guid uniqueId, CancellationToken cancellationToken = default)
+    public async Task<BookingApplicationResponse?>? Get(Guid uniqueId, CancellationToken cancellationToken = default)
     {
-        var booking = await _bookingRepository.Get(uniqueId, cancellationToken);
+        var booking = await _bookingRepository.Get(uniqueId, cancellationToken)!;
 
+        if (booking is null and null)
+        {
+            return null;
+        }
         return booking.ToApplicationResponse();
     }
 

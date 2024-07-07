@@ -25,4 +25,12 @@
       <ProjectReference Include="..\Prepaid.Infrastructure\Prepaid.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Middlewares\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Middlewares\RequestMiddleware.cs" />
+    </ItemGroup>
+
 </Project>

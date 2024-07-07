@@ -5,7 +5,7 @@ namespace Prepaid.Application.Extensions.MappingExtensions;
 
 public static class BookingMappingExtensions
 {
-    public static BookingApplicationResponse ToApplicationResponse(this Booking booking)
+    public static BookingApplicationResponse? ToApplicationResponse(this Booking booking)
     {
         return new BookingApplicationResponse()
         {
