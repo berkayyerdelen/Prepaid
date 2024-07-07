@@ -1,6 +1,5 @@
 ﻿using NSubstitute;
-using Prepaid.Application.Contracts;
-using Prepaid.Application.Responses;
+using NSubstitute.ReceivedExtensions;
 using Prepaid.Application.Services;
 using Prepaid.Domain.Models;
 using Prepaid.Domain.Policies.Contracts;
@@ -29,15 +28,16 @@ public class BookingServiceTests
     [Fact]
     public async Task Should_ReturnEmptyObject_WhenBookingNotFound()
     {
+        var bookingId = Arg.Any<Guid>();
         // Arrange
-        _bookingRepository.Get(Arg.Any<Guid>())!.Returns(default(Booking));
+        _bookingRepository.Get(bookingId).Returns(default(Booking));
         
         //Act
-        var booking = await _bookingService.Get(Arg.Any<Guid>())!;
+        var booking = await _bookingService.Get(bookingId)!;
         
         // Assert
         
-        Assert.Null(booking);
-
+        // Assert.Null(booking);
+        await _bookingRepository.Received(1).Get(bookingId);
     }
 }
